@@ -16,3 +16,14 @@ def timer(func):
         return result
 
     return inner
+
+
+def each_line(file, func):
+    with open(relative(file), "r") as file:
+        for line in file:
+            func(line)
+
+
+def each_line_str(str, func):
+    for line in str.splitlines():
+        func(line)

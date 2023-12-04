@@ -1,5 +1,5 @@
 import re
-from helpers import relative, timer
+from helpers import each_line, timer
 
 CALIBRATE_SAMPLE = """1abc2
 pqr3stu8vwx
@@ -55,10 +55,10 @@ def calibrate():
 @timer
 def calibrate_again():
     calibration = 0
+    expr = re.compile(r"(?=([1-9]|one|two|three|four|five|six|seven|eight|nine))")
 
     def add_calibration(line):
-        nonlocal calibration
-        expr = re.compile("(?=([1-9]|one|two|three|four|five|six|seven|eight|nine))")
+        nonlocal calibration, expr
         matches = expr.findall(line)
         tens, ones = canonicalize(matches[0]), canonicalize(matches[-1])
         calibration += int(f"{tens}{ones}")
@@ -68,12 +68,6 @@ def calibrate_again():
     return calibration
 
 
-def each_line(file, func):
-    with open(relative(file), "r") as file:
-        for line in file:
-            func(line)
-
-
 def canonicalize(digit):
     if digit in DIGITS:
         return digit
@@ -81,5 +75,5 @@ def canonicalize(digit):
 
 
 if __name__ == "__main__":
-    calibration = calibrate()
-    calibration_again = calibrate_again()
+    calibrate()
+    calibrate_again()
